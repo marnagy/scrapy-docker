@@ -35,7 +35,7 @@ services:
   scrapy-backend:
     build: ./scrapy-backend
     ports:
-      - "8000:5000"
+      - "8080:5000"
     restart: always
     depends_on:
       scrapy-postgresql:
