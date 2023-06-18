@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        #app-container {
+          background-color: lightgreen;
+          height: 100%;
+          width: 100%;
+          margin: 50px 30px;
+          padding: 20px;
+          border-radius: 20px;
+        }
+
+        #app-container #title-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #master-content-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        </style>
+    <title>Scrapped from SReality.cz</title>
+</head>
+<body>
+    <div id="app-container">
+        <div id="title-container">
+            <h2>Scrapped content below</h2>
+        </div>
+        
+        <div id="master-content-container">
+            {% for item in items %}
+                <div class="content-container">
+                    <img src="{{ item.img_url }}">
+                    <h4>{{ item.title }}</h4>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

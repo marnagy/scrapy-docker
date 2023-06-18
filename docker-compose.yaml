@@ -1,0 +1,52 @@
+version: "24"
+services:
+  scrapy-postgresql:
+    # image: postgres:15.3
+    # environment:
+    #   - POSTGRES_USER=admin
+    #   - POSTGRES_PASSWORD=scrapy_task
+    #   - POSTGRES_DB=sreality
+    build: ./scrapy-postgresql
+    ports:
+      - "5432:5432"
+    restart: always
+    # volumes:
+    #   - ./scrapy-postgresql/CreateDB.sql:/docker-entrypoint-initdb.d/
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "sreality"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s 
+    networks:
+      scrapy-net:
+        ipv4_address: 192.168.92.23
+
+  scrapy-scrapper:
+    build: ./scrapy-scrapper
+    depends_on:
+      scrapy-postgresql:
+        condition: service_healthy
+    restart: on-failure
+    networks:
+      scrapy-net:
+        ipv4_address: 192.168.92.20
+  
+  scrapy-backend:
+    build: ./scrapy-backend
+    ports:
+      - "8000:5000"
+    restart: always
+    depends_on:
+      scrapy-postgresql:
+        condition: service_healthy
+    networks:
+      scrapy-net:
+        ipv4_address: 192.168.92.21
+
+networks:
+  scrapy-net:
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.92.0/24"

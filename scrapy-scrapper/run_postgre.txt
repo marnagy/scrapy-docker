@@ -1,0 +1,11 @@
+docker run --name postgres \
+  -e POSTGRES_PASSWORD=scrapy_task \
+  -e POSTGRES_USER=admin \
+  -e POSTGRES_DB=sreality \
+  -d --restart always \
+  --net scrapy-net
+  -p 5432:5432
+  postgres:15.3
+
+
+scrapy-net 85b54ec11e8f8adeebc7b400cf7f21e643474fda3a41a23d88b2f0effeadefe3
