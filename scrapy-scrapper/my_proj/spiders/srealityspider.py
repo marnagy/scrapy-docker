@@ -20,14 +20,14 @@ class SrealityspiderSpider(scrapy.Spider):
                 'playwright': True,
                 'playwright_include_page': True,
                 'playwright_page_methods': [
-                    # PageMethod(
-                    #     'wait_for_selector',
-                    #     'div.dir-property-list'
-                    # ),
                     PageMethod(
                         'wait_for_selector',
-                        'a.btn-paging-pn.icof.icon-arr-right.paging-next'
+                        'div.dir-property-list'
                     )
+                    # PageMethod(
+                    #     'wait_for_selector',
+                    #     'a.btn-paging-pn.icof.icon-arr-right.paging-next'
+                    # )
                 ]
             }
         )
@@ -38,11 +38,6 @@ class SrealityspiderSpider(scrapy.Spider):
                 break
             
             self.item_counter += 1
-            # item = RealityItem()
-            # item['title'] = item.css("span.name.ng-binding::text").get()
-            # item['img_url'] = item.css('img::attr(src)').get()
-
-            # yield item
 
             yield {
                 'id': self.item_counter,
@@ -58,14 +53,14 @@ class SrealityspiderSpider(scrapy.Spider):
                                     'playwright': True,
                                     'playwright_include_page': True,
                                     'playwright_page_methods': [
-                                        # PageMethod(
-                                        #     'wait_for_selector',
-                                        #     'div.dir-property-list'
-                                        # ),
                                         PageMethod(
                                             'wait_for_selector',
-                                            'a.btn-paging-pn.icof.icon-arr-right.paging-next'
+                                            'div.dir-property-list'
                                         )
+                                        # PageMethod(
+                                        #     'wait_for_selector',
+                                        #     'a.btn-paging-pn.icof.icon-arr-right.paging-next'
+                                        # )
                                     ]
                                 }
                                 )
