@@ -1,17 +1,18 @@
 from flask import Flask, render_template
 import psycopg2
+import os
 
 app = Flask('SReality webserver')
 connection = psycopg2.connect(
-    host = '192.168.92.23',
+    host = os.getenv("POSTGRES_HOST"),
     port = 5432,
-    user = 'admin',
-    password = 'scrapy_task',
+    user = os.getenv("POSTGRES_USER"),
+    password = os.getenv("POSTGRES_PASSWORD"),
     database = 'sreality'
 )
 cursor = connection.cursor()
 
-postgreSQL_select_Query = "select * from sreality_items"
+postgreSQL_select_Query = "SELECT * FROM sreality_items"
 
 @app.get('/')
 def index():

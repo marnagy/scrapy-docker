@@ -6,6 +6,7 @@ from time import sleep
 
 class SrealityspiderSpider(scrapy.Spider):
     name: str = "srealityspider"
+    # TODO: page loads in browser but is not crawlable using playwright, FIX
     base_url: str = "https://www.sreality.cz/hledani/prodej/byty"
     current_page = 1
     item_counter: int = 0

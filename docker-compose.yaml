@@ -2,14 +2,16 @@ version: "24"
 services:
   scrapy-postgresql:
     # image: postgres:15.3
-    # environment:
-    #   - POSTGRES_USER=admin
-    #   - POSTGRES_PASSWORD=scrapy_task
-    #   - POSTGRES_DB=sreality
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=sreality
     build: ./scrapy-postgresql
-    ports:
+    ports: # for debugging
       - "5432:5432"
     restart: always
+    # env_file:
+    #   - .env
     # volumes:
     #   - ./scrapy-postgresql/CreateDB.sql:/docker-entrypoint-initdb.d/
     healthcheck:
@@ -18,9 +20,9 @@ services:
       timeout: 60s
       retries: 5
       start_period: 80s 
-    networks:
-      scrapy-net:
-        ipv4_address: 192.168.92.23
+    # networks:
+    #   scrapy-net:
+    #     ipv4_address: 192.168.92.23
 
   scrapy-scrapper:
     build: ./scrapy-scrapper
@@ -28,21 +30,31 @@ services:
       scrapy-postgresql:
         condition: service_healthy
     restart: on-failure
-    networks:
-      scrapy-net:
-        ipv4_address: 192.168.92.20
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+    # networks:
+    #   scrapy-net:
+    #     ipv4_address: 192.168.92.20
   
   scrapy-backend:
     build: ./scrapy-backend
     ports:
       - "8080:5000"
     restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
     depends_on:
       scrapy-postgresql:
         condition: service_healthy
-    networks:
-      scrapy-net:
-        ipv4_address: 192.168.92.21
+    # networks:
+    #   scrapy-net:
+    #     ipv4_address: 192.168.92.21
 
 networks:
   scrapy-net:

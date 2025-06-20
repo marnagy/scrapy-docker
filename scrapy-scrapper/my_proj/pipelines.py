@@ -8,6 +8,7 @@
 from itemadapter import ItemAdapter
 
 import psycopg2
+import os
 
 
 class MyProjPipeline:
@@ -17,10 +18,10 @@ class MyProjPipeline:
 class PostgreSQLPipeline:
     def __init__(self):
         self.connection = psycopg2.connect(
-            host = '192.168.92.23',
-            port = 5432,
-            user = 'admin',
-            password = 'scrapy_task',
+            host = os.getenv("POSTGRES_HOST"),
+            port = os.getenv("POSTGRES_PORT"),
+            user = os.getenv("POSTGRES_USER"),
+            password = os.getenv("POSTGRES_PASSWORD"),
             database = 'sreality'
         )
         self.curr = self.connection.cursor()
@@ -30,6 +31,7 @@ class PostgreSQLPipeline:
         return item
 
     def store_to_db(self, item):
+        print(f"Saving {item} to DB")
         try:
             self.curr.execute(""" insert into sreality_items (id, title, img_url) values (%s, %s, %s)""",
                             (
@@ -39,5 +41,7 @@ class PostgreSQLPipeline:
                             )
                             )
             self.connection.commit()
+            print(f"{item} saved.")
         except BaseException as e:
             print(e, item)
+            print(f"Saving of item {item} FAILED.")
