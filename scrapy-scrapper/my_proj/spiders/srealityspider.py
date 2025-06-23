@@ -34,7 +34,8 @@ class SrealityspiderSpider(scrapy.Spider):
         )
 
     def parse(self, response):
-        for item in response.css('div.property.ng-scope'):
+        # for item in response.css('div.property.ng-scope'):
+        for item in response.css('a.css-1s6ohwi'):
             if self.item_counter >= self.max_items_amount:
                 break
             
@@ -47,8 +48,10 @@ class SrealityspiderSpider(scrapy.Spider):
 
             yield {
                 'id': self.item_counter,
-                'title': item.css("span.name.ng-binding::text").get(),
-                'img_url': item.css('img::attr(src)').get()
+                # 'title': item.css("span.name.ng-binding::text").get(),
+                # 'img_url': item.css('img::attr(src)').get()
+                'title': item.css("p.css-173t8lh:first-child::text").get(),
+                'img_url': item.css('img.css-1q0j11k::attr(src)').get()
             }
         
         if self.item_counter < self.max_items_amount:
@@ -65,7 +68,8 @@ class SrealityspiderSpider(scrapy.Spider):
                                         # ),
                                         PageMethod(
                                             'wait_for_selector',
-                                            'a.btn-paging-pn.icof.icon-arr-right.paging-next'
+                                            # 'a.btn-paging-pn.icof.icon-arr-right.paging-next'
+                                            'a.«r3s»'
                                         )
                                     ]
                                 }

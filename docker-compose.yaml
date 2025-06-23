@@ -6,9 +6,10 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=sreality
+      - PGPORT=${POSTGRES_PORT}
     build: ./scrapy-postgresql
     ports: # for debugging
-      - "5432:5432"
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     restart: always
     # env_file:
     #   - .env
@@ -23,6 +24,7 @@ services:
     # networks:
     #   scrapy-net:
     #     ipv4_address: 192.168.92.23
+    command: -p ${POSTGRES_PORT}
 
   scrapy-scrapper:
     build: ./scrapy-scrapper
@@ -38,6 +40,7 @@ services:
     # networks:
     #   scrapy-net:
     #     ipv4_address: 192.168.92.20
+    command: /bin/sh -c "while sleep 1000; do :; done"
   
   scrapy-backend:
     build: ./scrapy-backend
